@@ -13,15 +13,15 @@ model Task {
   endTime     DateTime?
   details     String?
   status      String     @default("TO_DO")
-  tags        TaskTag[]  // Relasi ke tabel TaskTag (junction table)
+  tags        TaskTag[]  
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
 }
 
 model Tag {
   id    String  @id @default(uuid())
-  name  String
-  tasks TaskTag[]  // Relasi ke tabel TaskTag (junction table)
+  name  String  @unique
+  tasks TaskTag[] 
 }
 
 model TaskTag {
@@ -31,6 +31,5 @@ model TaskTag {
   task   Task  @relation(fields: [taskId], references: [id])
   tag    Tag   @relation(fields: [tagId], references: [id])
 
-  // Set composite primary key
   @@id([taskId, tagId])
 }
