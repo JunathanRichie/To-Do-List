@@ -1,0 +1,36 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+model Task {
+  id          String     @id @default(uuid())
+  name        String
+  startTime   DateTime
+  endTime     DateTime?
+  details     String?
+  status      String     @default("TO_DO")
+  tags        TaskTag[]  // Relasi ke tabel TaskTag (junction table)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+}
+
+model Tag {
+  id    String  @id @default(uuid())
+  name  String
+  tasks TaskTag[]  // Relasi ke tabel TaskTag (junction table)
+}
+
+model TaskTag {
+  taskId String
+  tagId  String
+
+  task   Task  @relation(fields: [taskId], references: [id])
+  tag    Tag   @relation(fields: [tagId], references: [id])
+
+  // Set composite primary key
+  @@id([taskId, tagId])
+}
