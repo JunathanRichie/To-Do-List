@@ -23,3 +23,5 @@ export const AddTagsValidation = Joi.object({
   name: Joi.string().required(),
   color: Joi.string().required(),
 })
+
+export const RemoveTagValidation = Joi.string().guid().required();
